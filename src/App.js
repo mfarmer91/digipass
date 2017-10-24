@@ -18,13 +18,24 @@ function passReducer (state = { passes: [] }, action) {
             };
             return state.passes.concat(newPass); 
         }   
-        case 'DELETE_PASS': {   
+        case 'DELETE_PASS': { 
         }
         default: {
             return state;
         }
     }
 }
+
+function addMessage(text, id) {
+    return {
+        type: 'ADD_MESSAGE',
+        name: name,
+        id: id,
+        timer: timer,
+    };
+}
+
+const store = createStore(reducer);
 
 const App = () => (
     <div>
@@ -43,6 +54,10 @@ class TextFieldSubmit extends React.Component {
           value: e.target.value,
         })
     };
+
+    onSubmit = (m) => {
+        
+    };
     
     render() {
         return (
@@ -54,21 +69,49 @@ class TextFieldSubmit extends React.Component {
                         onChange={this.onChange}
                         value={this.state.value}
                     />
-                <button 
-                    className="ui green button" 
-                    type="submit"
-                >
-                Go
-                </button>
+                    <button 
+                        className="ui green button" 
+                        type="submit"
+                    >
+                    Go
+                    </button>
                 </div>
             </div>
         )
     }
 }
+
+
     
+const PassList = (props) => {
+    <div className="cards">
+        {
+            props.passes.map((m, index) => (
+                <div 
+                    className="ui card">
+                    key={index}
+                    {/*Add onClick prop here.*/}
+                    <div className="content">
+                        <div className="header">Hall Pass</div>
+                    </div>
+                    <div className="content">
+                        <h4 className="ui sub header">{m.name}</h4>
+                        <div className="item">{m.timer}</div>
+                    </div>
+                </div>
+        
+            )) {/*State will need to be mapped in.*/}
+            
+        }
+    </div>
+}
 
+function mapStateToPassList(dispatch) {
+    
+}
 
-
-
+const PassDisplay = connect(
+    
+)(PassList)
 
 export default App;
