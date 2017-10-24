@@ -26,3 +26,31 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+#go-bar {
+    width: 20%;
+    margin: 2.5% auto;
+}
+
+#go-button {
+    width: 200px;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+
+#go-input {
+    width: 200px;
+}
+
+#button-ctn {
+    display: block;
+}
+
+#main-header {
+    margin-top: 5%;
+    font-size: 4em;
+}
+
+#name {
+    padding-bottom: 5px;
+}

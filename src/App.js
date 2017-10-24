@@ -8,7 +8,7 @@ const reducer = combineReducers({
     passes: passReducer,
 });
 
-function passReducer (state = [{name: 'Ricky'},], action) {
+function passReducer (state = [{name: 'Michael Farmer'}], action) {
     switch (action.type) {
         case 'ADD_PASS': {
             const newPass = {
@@ -28,6 +28,7 @@ const store = createStore(reducer);
 
 const App = () => (
     <div>
+        <div id='main-header' className='ui center aligned huge header'>Digipass</div>
         <PassDisplay />
     </div>
 );
@@ -51,16 +52,20 @@ class TextFieldSubmit extends React.Component {
     
     render() {
         return (
-            <div className="ui center aligned green segment">
-                <div className="ui inverted input">
+            <div id='go-bar' className="ui center aligned segment">
+                <div className="ui input">
                     <input 
+                        id='go-input'
                         type="text" 
                         placeholder="Name goes here."
                         onChange={this.onChange}
                         value={this.state.value}
                     />
-                    <button 
-                        className="ui green button" 
+                </div>
+                <div id='button-ctn'>
+                    <button
+                        id='go-button'
+                        className="ui bottom attached green button" 
                         type="submit"
                         onClick={this.handleSubmit}
                     >
@@ -73,16 +78,22 @@ class TextFieldSubmit extends React.Component {
 }
 
 const PassList = (props) => (
-    <div className="ui cards">
+    <div className="ui centered aligned cards">
          {
           props.passes.map((p, index) => (
-            <div
-              className='card'
-              key={index}
+            <div className="ui raised card"
+                key={index}
             >
-              <div className='ui header'>
-                {p.name}
-                <span className='metadata'>Timer</span>
+              <div className="content">
+                <div className="ui center aligned large green header">Hall Pass</div>
+              </div>
+              <div className="extra content">
+                <div id='name' className="center aligned meta">
+                    {p.name}
+                </div>
+                <div className="center aligned small header">
+                    {p.timer}
+                </div>
               </div>
             </div>
           ))
