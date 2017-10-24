@@ -8,7 +8,7 @@ const reducer = combineReducers({
     passes: passReducer,
 });
 
-function passReducer (state = { passes: [] }, action) {
+function passReducer (state = [], action) {
     switch (action.type) {
         case 'ADD_PASS': {
             const newPass = {
@@ -18,28 +18,17 @@ function passReducer (state = { passes: [] }, action) {
             };
             return state.passes.concat(newPass); 
         }   
-        case 'DELETE_PASS': { 
-        }
         default: {
             return state;
         }
     }
 }
 
-function addMessage(text, id) {
-    return {
-        type: 'ADD_MESSAGE',
-        name: name,
-        id: id,
-        timer: timer,
-    };
-}
-
 const store = createStore(reducer);
 
 const App = () => (
     <div>
-        <TextFieldSubmit />
+        <PassDisplay />
     </div>
 );
     
@@ -55,8 +44,9 @@ class TextFieldSubmit extends React.Component {
         })
     };
 
-    onSubmit = (m) => {
-        
+    handleSubmit = (m) => {
+        this.props.onPassSubmit(this.state.value);
+        this.setState({ value: '' });
     };
     
     render() {
@@ -72,6 +62,7 @@ class TextFieldSubmit extends React.Component {
                     <button 
                         className="ui green button" 
                         type="submit"
+                        onSubmit={this.handleSubmit}
                     >
                     Go
                     </button>
@@ -84,34 +75,50 @@ class TextFieldSubmit extends React.Component {
 
     
 const PassList = (props) => {
-    <div className="cards">
-        {
-            props.passes.map((m, index) => (
-                <div 
-                    className="ui card">
-                    key={index}
-                    {/*Add onClick prop here.*/}
-                    <div className="content">
-                        <div className="header">Hall Pass</div>
-                    </div>
-                    <div className="content">
-                        <h4 className="ui sub header">{m.name}</h4>
-                        <div className="item">{m.timer}</div>
-                    </div>
-                </div>
-        
-            )) {/*State will need to be mapped in.*/}
-            
+    <div className="ui comments">
+         {
+          props.passes.map((p, index) => (
+            <div
+              className='comment'
+              key={index}
+            >
+              <div className='text'>
+                'Michael Farmer'
+                <span className='metadata'>Timer</span>
+              </div>
+            </div>
+          ))
         }
     </div>
 }
 
-function mapStateToPassList(dispatch) {
+class PassDisplay extends React.Component {
     
+    componentDidMount() {
+        store.subscribe(() => this.forceUpdate());
+    }
+    
+    render() {
+        
+            const state = store.getState();
+            const passes = state.passes;
+            
+        return (
+            <div>
+                <TextFieldSubmit 
+                    onPassSubmit={(name) => (
+                        store.dispatch({
+                            type: 'ADD_MESSAGE',
+                            name: name,
+                        })
+                    )}
+                />
+                <PassList
+                    passes={passes}
+                />
+            </div>
+        );
+    }
 }
-
-const PassDisplay = connect(
-    
-)(PassList)
 
 export default App;
