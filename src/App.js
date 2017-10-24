@@ -8,7 +8,7 @@ const reducer = combineReducers({
     passes: passReducer,
 });
 
-function passReducer (state = [], action) {
+function passReducer (state = [{name: 'Ricky'},], action) {
     switch (action.type) {
         case 'ADD_PASS': {
             const newPass = {
@@ -44,7 +44,7 @@ class TextFieldSubmit extends React.Component {
         })
     };
 
-    handleSubmit = (m) => {
+    handleSubmit = () => {
         this.props.onPassSubmit(this.state.value);
         this.setState({ value: '' });
     };
@@ -62,7 +62,7 @@ class TextFieldSubmit extends React.Component {
                     <button 
                         className="ui green button" 
                         type="submit"
-                        onSubmit={this.handleSubmit}
+                        onClick={this.handleSubmit}
                     >
                     Go
                     </button>
@@ -72,18 +72,16 @@ class TextFieldSubmit extends React.Component {
     }
 }
 
-
-    
 const PassList = (props) => (
-    <div className="ui comments">
+    <div className="ui cards">
          {
           props.passes.map((p, index) => (
             <div
-              className='comment'
+              className='card'
               key={index}
             >
-              <div className='text'>
-                'Michael Farmer'
+              <div className='ui header'>
+                {p.name}
                 <span className='metadata'>Timer</span>
               </div>
             </div>
@@ -108,7 +106,7 @@ class PassDisplay extends React.Component {
                 <TextFieldSubmit 
                     onPassSubmit={(name) => (
                         store.dispatch({
-                            type: 'ADD_MESSAGE',
+                            type: 'ADD_PASS',
                             name: name,
                         })
                     )}
