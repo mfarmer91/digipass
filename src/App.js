@@ -74,7 +74,7 @@ class TextFieldSubmit extends React.Component {
 
 
     
-const PassList = (props) => {
+const PassList = (props) => (
     <div className="ui comments">
          {
           props.passes.map((p, index) => (
@@ -90,7 +90,7 @@ const PassList = (props) => {
           ))
         }
     </div>
-}
+)
 
 class PassDisplay extends React.Component {
     
@@ -120,5 +120,7 @@ class PassDisplay extends React.Component {
         );
     }
 }
+
+
 
 export default App;
