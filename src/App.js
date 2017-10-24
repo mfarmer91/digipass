@@ -16,7 +16,7 @@ function passReducer (state = [{name: 'Ricky'},], action) {
                 id: uuid.v4(),
                 timer: '0:00',
             };
-            return state.passes.concat(newPass); 
+            return state.concat(newPass); 
         }   
         default: {
             return state;
