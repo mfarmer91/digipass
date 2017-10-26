@@ -8,14 +8,15 @@ const reducer = combineReducers({
     passes: passReducer,
 });
 
-function passReducer (state = [{name: 'Michael Farmer'}], action) {
+function passReducer (state = [], action) {
     switch (action.type) {
         case 'ADD_PASS': {
+            
             const newPass = {
                 name: action.name,
                 id: uuid.v4(),
-                timer: '0:00',
             };
+
             return state.concat(newPass); 
         }   
         default: {
@@ -23,6 +24,7 @@ function passReducer (state = [{name: 'Michael Farmer'}], action) {
         }
     }
 }
+
 
 const store = createStore(reducer);
 
@@ -49,6 +51,8 @@ class TextFieldSubmit extends React.Component {
         this.props.onPassSubmit(this.state.value);
         this.setState({ value: '' });
     };
+
+    
     
     render() {
         return (
@@ -79,39 +83,60 @@ class TextFieldSubmit extends React.Component {
 
 const PassList = (props) => (
     <div className="ui centered aligned cards">
-         {
-          props.passes.map((p, index) => (
-            <div className="ui raised card"
-                key={index}
-            >
-              <div className="content">
-                <div className="ui center aligned large green header">Hall Pass</div>
-              </div>
-              <div className="extra content">
-                <div id='name' className="center aligned meta">
-                    {p.name}
+        {
+            props.passes.map((p, index) => (
+                <div className="ui raised card"
+                    key={index}
+                >
+                    <div className="content">
+                        <div className="ui center aligned large green header">Hall Pass</div>
+                    </div>
+                    <div className="extra content">
+                        <div id='name' className="center aligned meta">
+                            {p.name}
+                        </div>
+                            <div>
+                                <Timer />
+                            </div>
+                    </div>
                 </div>
-                <div className="center aligned small header">
-                    {p.timer}
-                </div>
-              </div>
-            </div>
-          ))
+            ))
         }
     </div>
 )
 
+class Timer extends React.Component {
+    
+    state = {
+        elapsed: 0,
+        timer: null,
+    }
+
+    tick = () => {
+        this.setState({ elapsed: this.state.elapsed + 1});
+    }
+
+    componentDidMount() {
+        store.subscribe(() => this.forceUpdate());
+        this.interval = setInterval(this.tick, 1000);
+    }
+    render() {
+        return (
+            <div className='center aligned small header'>{this.state.elapsed}</div>
+        );
+    }
+}
+
 class PassDisplay extends React.Component {
     
     componentDidMount() {
-        store.subscribe(() => this.forceUpdate());
+        store.subscribe(() => this.forceUpdate());        
     }
     
     render() {
         
             const state = store.getState();
-            const passes = state.passes;
-            
+            const passes = state.passes;            
         return (
             <div>
                 <TextFieldSubmit 
@@ -119,6 +144,7 @@ class PassDisplay extends React.Component {
                         store.dispatch({
                             type: 'ADD_PASS',
                             name: name,
+                            start: 1,
                         })
                     )}
                 />
