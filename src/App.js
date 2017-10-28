@@ -6,6 +6,7 @@ import './App.css';
 
 const reducer = combineReducers({
     passes: passReducer,
+    timer: timerReducer,
 });
 
 function passReducer (state = [], action) {
@@ -25,8 +26,21 @@ function passReducer (state = [], action) {
     }
 }
 
+function timerReducer (state = 0, action) {
+    switch (action.type) {
+        case 'START_TIMER': {
+            return state + 1;
+        }   
+        default: {
+            return state;
+        }
+    }
+}
+
 
 const store = createStore(reducer);
+
+
 
 const App = () => (
     <div>
@@ -47,10 +61,11 @@ class TextFieldSubmit extends React.Component {
         })
     };
 
-    handleSubmit = () => {
+    handleClick = () => {
+        this.props.startTimer();
         this.props.onPassSubmit(this.state.value);
         this.setState({ value: '' });
-    };
+    }
 
     
     
@@ -71,7 +86,8 @@ class TextFieldSubmit extends React.Component {
                         id='go-button'
                         className="ui bottom attached green button" 
                         type="submit"
-                        onClick={this.handleSubmit}
+                        onClick={this.handleClick}
+
                     >
                     Go
                     </button>
@@ -105,24 +121,22 @@ const PassList = (props) => (
     </div>
 )
 
+
+
+
+
 class Timer extends React.Component {
     
-    state = {
-        elapsed: 0,
-        timer: null,
-    }
-
-    tick = () => {
-        this.setState({ elapsed: this.state.elapsed + 1});
-    }
-
     componentDidMount() {
         store.subscribe(() => this.forceUpdate());
-        this.interval = setInterval(this.tick, 1000);
     }
+        
     render() {
+        const state = store.getState();
+        const timer = state.timer;
+
         return (
-            <div className='center aligned small header'>{this.state.elapsed}</div>
+            <div className='center aligned small header'>{timer}</div>
         );
     }
 }
@@ -134,19 +148,27 @@ class PassDisplay extends React.Component {
     }
     
     render() {
-        
             const state = store.getState();
-            const passes = state.passes;            
+            const passes = state.passes;
+        
         return (
             <div>
+                
                 <TextFieldSubmit 
+                    
                     onPassSubmit={(name) => (
                         store.dispatch({
                             type: 'ADD_PASS',
                             name: name,
-                            start: 1,
                         })
                     )}
+                    
+                    startTimer={ () => ( setInterval( function() {
+                        store.dispatch({
+                            type: 'START_TIMER'
+                        })
+                    }, 1000 ))}
+
                 />
                 <PassList
                     passes={passes}
